@@ -1,21 +1,30 @@
 #ifndef T_ARRAY_H
 #define T_ARRAY_H
 
-//κλάση TArray: δυναμικός πίνακας με υποστήριξων πολλαπλών τύπων
+/**
+* TArray Class
+* Dynamic Array
+**/
 
-template<class T> //template κλάση για την υποστήριξη διαφορετικών τύπων πίνακα
+template<class T>
 class TArray
 {
 private:
-	T* pArray; //δείκτης με την αρχή του πίνακα
-	int currSize; //μέγεθος που χρησιμοποιείται από τον χρήστη
-	int size; //δεσμευμένο μέγεθος στη μνήμη
-	int maxSize; //μέγιστο μέγεθος στη μνήμη - 0=άπειρο
+	//TArray data
+	T* pArray; //pointer to data
+	int currSize; //current number of elements in array
+	int size; //current number of elements allocated in memory
+	int maxSize; //maximum size of array
 public:
 
+	/**
+	* TArray::iterator Class
+	* iterator for stl compatibility and enhance functionality
+	**/
 	class iterator
 	{
 	public:
+		//typedefs
 		typedef T value_type;
 		typedef T* pointer;
 		typedef T& reference;
@@ -23,16 +32,19 @@ public:
 		typedef std::random_access_iterator_tag iterator_category;
 		typedef int difference_type;
 
+		//Default Constructor
 		iterator()
 		{
 			ptr = NULL;
 		}
 
+		//Copy Constructor
 		iterator(iterator& a)
 		{
 			ptr = a.Ptr();
 		}
 
+		//Constructor
 		iterator(pointer a)
 		{
 			ptr = a;
@@ -40,6 +52,7 @@ public:
 
 		pointer Ptr() { return ptr; }
 
+		//Operator Overloading needed for iterators
 		self_type operator++()
 		{
 			ptr++;
@@ -148,16 +161,18 @@ public:
 		}
 
 		private:
+			//pointer to object
 			pointer ptr;
 	};
-	//constructors
+	//Default Constructor
 	TArray<T>()
 	{
-		size = 4;
+		size = 4; // initial size in memory = 4 elements
 		pArray = new T[4];
 		currSize = 0;
 		maxSize = 0;
 	}
+	//Constructor
 	TArray<T>(int initialNum, int MaxSize = 0)
 	{
 		if(MaxSize < 0)
@@ -165,12 +180,13 @@ public:
 		if(initialNum < 0)
 			initialNum = 4;
 		maxSize = MaxSize;
-		pArray = new T[3*initialNum/2];
+		pArray = new T[3*initialNum/2]; // allocate 3*num/2 size in memory for num elements
 		memset(pArray, T(), initialNum*sizeof(T));
 		size = 3*initialNum/2;
 		currSize = initialNum;
 	}
 
+	//Copy constructor
 	TArray<T>(T* Array, int num, int MaxSize = 0)
 	{
 		if(MaxSize < 0)
@@ -184,20 +200,18 @@ public:
 			maxSize = size;
 	}
 
-	int Size(); //μέγεθος που χρησιμοποιείται
-	int MemorySize(); //δεσμευμένος χώρος στη μνήμη
-	int MaxSize(); //μέγιστο μέγεθος
-	bool Empty(); //άδειος πίνακας?
-	bool resize(int newSize); //αλλαγή μεγέθους πίνακα
-	T& at(int index); //επιστροφή της τιμής που βρίσκεται στη θέση index
-	void push_back(const T& val); //προσθήκη τιμής στο τέλος του πίνακα
-	void push_front(const T& val); //προσθήκη τιμής στην αρχή του πίνακα
-	//void insert(int index, const T& val); //προσθήκη τιμής στη θέση index του πίνακα
-	//void insert(int index, int num, const T& val = T()); //προσθήκη πολλαπλής τιμής στη θέση index
-	void insert(T* Array, int index, int iStart, int iEnd); //προσθήκη μέρος πίνακα στη θέση index
-	T remove(int index); //διαγραφή της θέσης index
-	T* remove(int iStart, int iEnd); //διαγραφή περιοχής του πίνακα
-	iterator insert(iterator position, const T& val) //προσθήκη τιμής στη θέση position
+	int Size(); //Returns current size
+	int MemorySize(); //Returns current size allocated in memory (# elements)
+	int MaxSize(); //Returns maximum size
+	bool Empty(); //is Empty?
+	bool resize(int newSize); //resize to newSize, returns true if succeeded
+	T& at(int index); //Get element at index position
+	void push_back(const T& val); //Push new value at last position
+	void push_front(const T& val); //Push new value at first position
+	void insert(T* Array, int index, int iStart, int iEnd); //Insert data from array at index position
+	T remove(int index); //Remove element at index position
+	T* remove(int iStart, int iEnd); //Remove multiple elements
+	iterator insert(iterator position, const T& val) //Insert new value at position
 	{
 		if(position >= end())
 		{
@@ -228,7 +242,7 @@ public:
 		return position;
 	}
 
-	iterator insert(iterator position, int num, const T& val = T()) //προσθήκη πολλαπλής τιμής στη θέση position
+	iterator insert(iterator position, int num, const T& val = T()) //Insert multiple new values at position
 	{
 		if(position >= end())
 		{
@@ -263,7 +277,7 @@ public:
 	}
 
 	template<class Iter>
-	iterator insert(iterator position, Iter iStart, Iter iEnd)
+	iterator insert(iterator position, Iter iStart, Iter iEnd) //insert data from iterator at position
 	{
 		for(Iter it = iStart;it!=iEnd;it++)
 		{
@@ -273,7 +287,7 @@ public:
 		return position-1;
 	}
 
-	iterator remove(iterator position)
+	iterator remove(iterator position) //remove at position
 	{
 		if(Size() > 0)
 		{
@@ -296,7 +310,7 @@ public:
 		return iterator();
 	}
 
-	iterator remove(iterator iStart, iterator iEnd)
+	iterator remove(iterator iStart, iterator iEnd) //remove multiple
 	{
 		if(Size() > 0)
 		{
@@ -323,18 +337,18 @@ public:
 		}
 		return iterator();
 	}
-	void Clear(); //καθαρισμός πίνακα
-	void setMaxSize(int MaxSize); //ορισμός μέγιστου μεγέθους - MaxSize < Size ή MaxSize < MemorySize τότε MaxSize δεν αλλάζει
-	T* getArray() { return pArray; }
-	T& operator [](int index) //υπερφόρτωση του τελεστή [] για την εύκολη πρόσβαση στις τιμές του πίνακα (myArray[index])
+	void Clear(); //Remove all data
+	void setMaxSize(int MaxSize); //Change maximum size
+	T* getArray() { return pArray; } //Get pointer of start array
+	T& operator [](int index) //Get element at index position
 	{
 		return at(index);
 	}
 
-	iterator begin() { return iterator(pArray); }
-	iterator end() { return iterator(pArray+Size()); }
+	iterator begin() { return iterator(pArray); } //iterator pointing at first element
+	iterator end() { return iterator(pArray+Size()); } //iterator pointing at last element
 
-	TArray<T>& operator =(const TArray* other) //υπερφόρτωση του τελεστή =
+	TArray<T>& operator =(const TArray* other) //Copy
 	{
 		if(this == &other)
 			return *this;
@@ -375,7 +389,6 @@ bool TArray<T>::Empty()
 template<class T>
 T& TArray<T>::at(int index)
 {
-	//έλεγχος για τις περιπτώσης που το index ξεφεύγει από τον πίνακα (no error) -> μπορεί κάποιες φορές να οδηγήσει σε λάθος αποτελέσματα αλλά δεν κρασάρει ποτέ ο κώδικας
 	if(index >= Size())
 	{
 		return pArray[Size()-1];
@@ -390,7 +403,7 @@ T& TArray<T>::at(int index)
 template<class T>
 bool TArray<T>::resize(int newSize)
 {
-	if(newSize <= 0) //αν θέλουμε να κάνουμε το μέγεθος του πίνακα μικρότερο του 0 ή μηδενικό δεν επιτρέπεται
+	if(newSize <= 0)
 		return false;
 	if(maxSize != 0 && newSize > maxSize)
 	{
@@ -443,64 +456,6 @@ void TArray<T>::push_front(const T& val)
 		pArray[0] = val;
 	}
 }
-
-/*template<class T>
-void TArray<T>::insert(int index, const T& val)
-{
-	if(index >= Size())
-	{
-		push_back(val);
-		return;
-	}
-	else if(index <= 0)
-	{
-		push_front(val);
-		return;
-	}
-	bool add = true;
-	if((Size()+1) > MemorySize())
-	{
-		int x = (3*(MemorySize()+1)/2);
-		if(x > MaxSize() && MaxSize() != 0 && (Size()+1) <= MaxSize())
-			x = MaxSize();
-		add = resize(x);
-	}
-	if(add)
-	{
-		currSize++;
-		memcpy(pArray+index, pArray+index-1, (Size()-index)*sizeof(T));
-		pArray[index] = val;
-	}
-}
-
-
-template<class T>
-void TArray<T>::insert(int index, int num, const T& val = T())
-{
-	if(index > Size())
-	{
-		index = Size();
-	}
-	else if(index < 0)
-	{
-		index = 0;
-	}
-	bool add = true;
-	if((Size()+num) > MemorySize())
-	{
-		int x = (3*(MemorySize() + num)/2);
-		if(x > MaxSize() && MaxSize() != 0 && (Size()+num) <= MaxSize())
-			x = MaxSize();
-		add = resize(x);
-	}
-	if(add)
-	{
-		memcpy(pArray+index+num, pArray+index, (Size()-index)*sizeof(T));
-		currSize += num;
-		for(int i=index;i<(index+num);i++)
-			pArray[i] = val;
-	}
-}*/
 
 template<class T>
 void TArray<T>::insert(T* Array, int index, int iStart, int iEnd)
