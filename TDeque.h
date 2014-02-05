@@ -1,17 +1,29 @@
+/*
+    Copyright (C)  2013, 2014 Chatzilygeroudis Konstantinos
+
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+    to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+    and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+    IN THE SOFTWARE.
+*/
 #ifndef T_DEQUE_H
 #define T_DEQUE_H
 
 
-//κλάση TDeque: double ended queue-> στην ουσία είναι δυναμικός πίνακας που όμως υποστηρίζει ίδια ταχύτητα εγγραφής στο τέλος και στην αρχή του. Υλοποιείται στην ουσία με 2 δυναμικούς πίνακες:
-//τον "front" και τον "back"! Δυνατότητα αλλαγής του μέσου αποθήκευσης (πρέπει να υποστηρίζει push_back(), at(), Size(), remove(+1overload), setMaxSize(), insert(+2overloads), Clear())
-
-template<class T, class Array = TArray<T>>
+template<class T, class Array = TArray<T> >
 class TDeque
 {
 private:
-	Array pDequeFront; //front πίνακας
-	Array pDequeBack; //back πίνακας
-	int maxSize; //μέγιστο μέγεθος - κατανέμεται στους 2 υποπίνακες ανάλογα με τις προσθήκες που δέχεται ο καθένας
+	Array pDequeFront;
+	Array pDequeBack;
+	int maxSize;
 public:
 
 	class iterator
@@ -30,9 +42,9 @@ public:
 			ptr = NULL;
 		}
 
-		iterator(iterator& a)
+		iterator(const iterator& a)
 		{
-			ptr = a.Ptr();
+			ptr = a.ptr;
 			deq = a.Deque();
 		}
 
@@ -43,6 +55,8 @@ public:
 		}
 
 		pointer Ptr() { return ptr; }
+
+		cont Deque() const { return deq; }
 
 		cont Deque() { return deq; }
 
@@ -56,10 +70,10 @@ public:
 		self_type operator++()
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
+			typename Array::iterator bStart = b.begin();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				ptr--;
@@ -83,11 +97,11 @@ public:
 		self_type operator--()
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 				ptr++;
 			else
@@ -109,11 +123,11 @@ public:
 		self_type operator-(int a)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				self_type b = self_type(Ptr()+a, deq);
@@ -141,11 +155,11 @@ public:
 		self_type operator-=(int a)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				ptr += a;
@@ -172,11 +186,11 @@ public:
 		self_type operator+(int a)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				difference_type x = ptr - fStart.Ptr();
@@ -202,11 +216,11 @@ public:
 		self_type operator+=(int a)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				difference_type x = ptr - fStart.Ptr();
@@ -242,11 +256,11 @@ public:
 		reference operator[](int i)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
 			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()))
 			{
 				difference_type x = ptr - fStart.Ptr();
@@ -256,73 +270,73 @@ public:
 				}
 				else
 				{
-					difference_type k = a - x;
+					difference_type k = i - x;
 					return bStart[k];
 				}
 			}
 			return ptr[i];
 		}
 
-		difference_type operator-(self_type& rhs)
+		difference_type operator-(const self_type& rhs)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
-			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.Ptr(), fStart.Ptr(), fEnd.Ptr()))
-				return (ptr - rhs.Ptr());
-			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.Ptr(), bStart.Ptr(), bEnd.Ptr()))
-				return (ptr - rhs.Ptr());
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
+			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.ptr, fStart.Ptr(), fEnd.Ptr()))
+				return (ptr - rhs.ptr);
+			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.ptr, bStart.Ptr(), bEnd.Ptr()))
+				return (ptr - rhs.ptr);
 			else
 			{
 				if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()))
 				{
 					difference_type x = ptr - bStart.Ptr();
-					difference_type a = rhs.Ptr() - fStart.Ptr();
+					difference_type a = rhs.ptr - fStart.Ptr();
 					return a+x+1;
 				}
 				else
 				{
 					difference_type x = ptr - fStart.Ptr();
-					difference_type a = rhs.Ptr() - bStart.Ptr();
+					difference_type a = rhs.ptr - bStart.Ptr();
 					return a+x+1;
 				}
 			}
-			difference_type a = ptr - rhs.Ptr();
+			difference_type a = ptr - rhs.ptr;
 			return a;
 		}
 
-		self_type operator=(self_type& rhs)
+		self_type operator=(const self_type& rhs)
 		{
-			ptr = rhs.Ptr();
+			ptr = rhs.ptr;
 			deq = rhs.Deque();
 			return *this;
 		}
 
-		bool operator==(self_type& rhs)
+		bool operator==(const self_type& rhs)
 		{
-			return ptr == rhs.Ptr();
+			return ptr == rhs.ptr;
 		}
 
-		bool operator!=(self_type& rhs)
+		bool operator!=(const self_type& rhs)
 		{
-			return ptr != rhs.Ptr();
+			return ptr != rhs.ptr;
 		}
 
-		bool operator>(self_type& rhs)
+		bool operator>(const self_type& rhs)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
-			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.Ptr(), fStart.Ptr(), fEnd.Ptr()))
-				return (ptr < rhs.Ptr());
-			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.Ptr(), bStart.Ptr(), bEnd.Ptr()))
-				return (ptr > rhs.Ptr());
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
+			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.ptr, fStart.Ptr(), fEnd.Ptr()))
+				return (ptr < rhs.ptr);
+			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.ptr, bStart.Ptr(), bEnd.Ptr()))
+				return (ptr > rhs.ptr);
 			else
 			{
 				if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()))
@@ -334,21 +348,21 @@ public:
 					return false;
 				}
 			}
-			return ptr > rhs.Ptr();
+			return ptr > rhs.ptr;
 		}
 
-		bool operator>=(self_type& rhs)
+		bool operator>=(const self_type& rhs)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
-			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.Ptr(), fStart.Ptr(), fEnd.Ptr()))
-				return (ptr <= rhs.Ptr());
-			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.Ptr(), bStart.Ptr(), bEnd.Ptr()))
-				return (ptr >= rhs.Ptr());
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
+			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.ptr, fStart.Ptr(), fEnd.Ptr()))
+				return (ptr <= rhs.ptr);
+			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.ptr, bStart.Ptr(), bEnd.Ptr()))
+				return (ptr >= rhs.ptr);
 			else
 			{
 				if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()))
@@ -360,21 +374,21 @@ public:
 					return false;
 				}
 			}
-			return ptr >= rhs.Ptr();
+			return ptr >= rhs.ptr;
 		}
 
-		bool operator<(self_type& rhs)
+		bool operator<(const self_type& rhs)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
-			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.Ptr(), fStart.Ptr(), fEnd.Ptr()))
-				return (ptr > rhs.Ptr());
-			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.Ptr(), bStart.Ptr(), bEnd.Ptr()))
-				return (ptr < rhs.Ptr());
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
+			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.ptr, fStart.Ptr(), fEnd.Ptr()))
+				return (ptr > rhs.ptr);
+			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.ptr, bStart.Ptr(), bEnd.Ptr()))
+				return (ptr < rhs.ptr);
 			else
 			{
 				if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()))
@@ -386,21 +400,21 @@ public:
 					return true;
 				}
 			}
-			return ptr < rhs.Ptr();
+			return ptr < rhs.ptr;
 		}
 
-		bool operator<=(self_type& rhs)
+		bool operator<=(const self_type& rhs)
 		{
 			Array f = deq.getFrontArray();
-			Array::iterator fStart = f.begin();
-			Array::iterator fEnd = f.end();
+			typename Array::iterator fStart = f.begin();
+			typename Array::iterator fEnd = f.end();
 			Array b = deq.getBackArray();
-			Array::iterator bStart = b.begin();
-			Array::iterator bEnd = b.end();
-			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.Ptr(), fStart.Ptr(), fEnd().Ptr()))
-				return (ptr >= rhs.Ptr());
-			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.Ptr(), bStart.Ptr(), bEnd().Ptr()))
-				return (ptr <= rhs.Ptr());
+			typename Array::iterator bStart = b.begin();
+			typename Array::iterator bEnd = b.end();
+			if(isInRange(ptr, fStart.Ptr(), fEnd.Ptr()) && isInRange(rhs.ptr, fStart.Ptr(), fEnd().Ptr()))
+				return (ptr >= rhs.ptr);
+			else if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()) && isInRange(rhs.ptr, bStart.Ptr(), bEnd().Ptr()))
+				return (ptr <= rhs.ptr);
 			else
 			{
 				if(isInRange(ptr, bStart.Ptr(), bEnd.Ptr()))
@@ -412,7 +426,7 @@ public:
 					return true;
 				}
 			}
-			return ptr <= rhs.Ptr();
+			return ptr <= rhs.ptr;
 		}
 
 		private:
@@ -442,7 +456,7 @@ public:
 			setMaxSize(MaxSize);
 	}
 
-	TDeque<T>& operator =(const TDeque* other) //υπερφόρτωση του τελεστή =
+	TDeque<T>& operator =(const TDeque* other)
 	{
 		if(this == &other)
 			return *this;
@@ -452,7 +466,7 @@ public:
 		return *this;
 	}
 
-	void setMaxSize(int MaxSize) //ορισμός μέγισου μεγέθους
+	void setMaxSize(int MaxSize)
 	{
 		maxSize = MaxSize;
 		if(maxSize < (pDequeBack.Size() + pDequeFront.Size()))
@@ -493,7 +507,7 @@ public:
 		return iterator(pDequeBack.end().Ptr(), *this);
 	}
 
-	int Size() //μέγεθος
+	int Size()
 	{
 		return (pDequeBack.Size() + pDequeFront.Size());
 	}
@@ -514,21 +528,21 @@ public:
 		pDequeBack.Clear();
 	}
 
-	void push_back(const T& value) //προσθήκη τιμής στο τέλος
+	void push_back(const T& value)
 	{
 		pDequeBack.push_back(value);
 		if(maxSize != 0)
 			pDequeFront.setMaxSize(maxSize - pDequeBack.Size());
 	}
 
-	void push_front(const T& value) //προσθήκη τιμής στην αρχή
+	void push_front(const T& value)
 	{
 		pDequeFront.push_back(value);
 		if(maxSize != 0)
 			pDequeBack.setMaxSize(maxSize - pDequeFront.Size());
 	}
 
-	T& at(int index) //προσπέλαση τιμής - επιτρέπεται και αλλαγή τιμής: myDeque.at(index) = 10;
+	T& at(int index)
 	{
 		if(index > Size())
 			index = Size();
@@ -540,12 +554,12 @@ public:
 			return pDequeFront.at(pDequeFront.Size()-index-1);
 	}
 
-	T& operator [](int index) //υπερφόρτωση του τελεστή [] για την εύκολη πρόσβαση στις τιμές του πίνακα (myDeque[index]) - επιτρέπεται και αλλαγή τιμής: myDeque[index] = 10;
+	T& operator [](int index)
 	{
 		return at(index);
 	}
 
-	void insert(const T& value, int index) //προσθήκη τιμής στη θέση index
+	void insert(const T& value, int index)
 	{
 		if(index <= 0)
 			return push_front(value);
@@ -567,7 +581,7 @@ public:
 		}
 	}
 
-	void insert(const T& value, int index, int num) //προσθήκη πολλαπλής τιμής (num φορές) στη θέση index
+	void insert(const T& value, int index, int num)
 	{
 		if(index <= 0)
 		{
@@ -597,7 +611,7 @@ public:
 		}
 	}
 
-	void insert(T* Arr, int index, int iStart, int iEnd) //προσθήκη μέρος πίνακα στη θέση index
+	void insert(T* Arr, int index, int iStart, int iEnd)
 	{
 		if(index <= 0)
 		{
@@ -642,21 +656,21 @@ public:
 		}
 	}
 	
-	T pop_front() //εξαγωγή πρώτου στοιχείου
+	T pop_front()
 	{
 		T x = pDequeFront.remove(pDequeFront.Size()-1);
 		pDequeBack.setMaxSize(maxSize - pDequeFront.Size());
 		return x;
 	}
 
-	T pop_back() //εξαγωγή τελευταίου στοιχείου
+	T pop_back()
 	{
 		T x = pDequeBack.remove(pDequeBack.Size()-1);
 		pDequeFront.setMaxSize(maxSize - pDequeBack.Size());
 		return x;
 	}
 
-	T remove(int index) //διαγραφή στοιχείου στη θέση index
+	T remove(int index)
 	{
 		if(index <= 0)
 		{
@@ -680,7 +694,7 @@ public:
 		}
 	}
 
-	T* remove(int iStart, int iEnd) //διαγραφή μέρους του πίνακα ([iStart,iEnd))
+	T* remove(int iStart, int iEnd)
 	{
 		if(iStart > iEnd)
 		{

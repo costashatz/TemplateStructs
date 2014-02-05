@@ -1,17 +1,34 @@
+/*
+    Copyright (C)  2013, 2014 Chatzilygeroudis Konstantinos
+
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+    to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+    and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+    IN THE SOFTWARE.
+*/
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-//κλάση TList: double linked list
-//κλάση TListElement: double linked list's node
+/**
+* TListElement Class
+* Element of TList Class (double-linked list)
+**/
 
 template<class T>
 class TListElement
 {
 private:
-	T value; //η τιμή του node
-	TListElement* previous; //δείκτης που δείχνει στο επόμενο node
-	TListElement* next; //δείκτης που δείχνει στο προηγούμενο node
-	TListElement* nil; //δείκτης null αντικειμένου - υπάρχει δυνατότητα να θέτεις αντί για NULL κάποιο άλλο αντικείμενο (structures with sentinels)
+	T value;
+	TListElement* previous;
+	TListElement* next;
+	TListElement* nil;
 public:
 	//constructors
 	TListElement()
@@ -37,11 +54,11 @@ public:
 		next = Next;
 	}
 
-	void setValue(const T& val); //αλλαγή/ορισμός τιμής
-	void setNext(TListElement<T>* Next); //αλλαγή/ορισμός "επομένου" δείκτη
-	void setPrev(TListElement<T>* prev); //αλλαγή/ορισμός "προηγουμένου" δείκτη
-	void setNil(TListElement<T>* NIL); //αλλαγή/ορισμός "NULL" δείκτη
-	T& Value(); //επιστροφή τιμής (μπορεί να γίνει και αλλαγή: x.Value() = 10)
+	void setValue(const T& val);
+	void setNext(TListElement<T>* Next);
+	void setPrev(TListElement<T>* prev);
+	void setNil(TListElement<T>* NIL);
+	T& Value();
 	TListElement<T>* Prev();
 	TListElement<T>* Next();
 	TListElement<T>* Nil();
@@ -119,13 +136,17 @@ TListElement<T>* TListElement<T>::Nil()
 }
 
 
-//κλάση TList: double linked list
+/**
+* TList Class
+* Double-linked List
+**/
+
 template<class T>
 class TList
 {
 private:
-	TListElement<T>* nil; //null αντικείμενο της λίστας (sentinel)
-	int size; //μέγεθος λίστας
+	TListElement<T>* nil;
+	int size;
 public:
 
 	class iterator
@@ -431,13 +452,13 @@ public:
 	int Size() { return size; }
 	bool Empty() { return (size==0); }
 	void Clear();
-	void push_back(const T& value); //προσθήκη τιμής στο τέλος της λίστας
-	void push_front(const T& value); //προσθήκη τιμής στην αρχή της λίστας
-	void insert(const T& value, int index); //προσθήκη τιμής στη θέση index (αν index > size ή index < 0 τότε η τιμή προστίθεται στο τέλος ή στην αρχή αντίστοιχα)
-	void insert(const T& value, int index, int num); //προσθήκη πολλαπλής τιμής στη θέση index
-	void insert(T* Array, int index, int iStart, int iEnd); //προσθήκη πίνακα στη θέση index
+	void push_back(const T& value);
+	void push_front(const T& value);
+	void insert(const T& value, int index);
+	void insert(const T& value, int index, int num);
+	void insert(T* Array, int index, int iStart, int iEnd);
 
-	iterator insert(const T& val, iterator position) //προσθήκη τιμής στη θέση position
+	iterator insert(const T& val, iterator position)
 	{
 		if(position >= end())
 		{
@@ -462,7 +483,7 @@ public:
 		return position;
 	}
 
-	iterator insert(const T& val, iterator position, int num) //προσθήκη πολλαπλής τιμής στη θέση position
+	iterator insert(const T& val, iterator position, int num)
 	{
 		if(position >= end())
 		{
@@ -505,11 +526,11 @@ public:
 		return iterator();
 	}
 
-	T& at(int index); //επιστροφή της τιμής που βρίσκεται στη θέση index (επιτρέπεται αλλαγή της τιμής: list->at(0) = 10)
-	TListElement<T>* getElement(int index); //επιστροφή του στοιχείου στη θέση index (search-like)
-	TListElement<T>* search(T key); //αναζήτηση τιμής
-	TListElement<T>* remove(T key); //διαγραφή τιμής
-	TListElement<T>* removeIndex(int index); //διαγραφή αντικειμένου στη θέση index
+	T& at(int index);
+	TListElement<T>* getElement(int index);
+	TListElement<T>* search(T key);
+	TListElement<T>* remove(T key);
+	TListElement<T>* removeIndex(int index);
 
 	iterator begin()
 	{
@@ -521,7 +542,7 @@ public:
 		return iterator(nil);
 	}
 
-	T& operator [](int index) //υπερφόρτωση του τελεστή [] για την εύκολη πρόσβαση στις τιμές της λίστας (myList[index]) (επιτρέπεται αλλαγή της τιμής: list[0] = 10)
+	T& operator [](int index)
 	{
 		return at(index);
 	}
