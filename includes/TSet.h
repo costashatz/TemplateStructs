@@ -18,7 +18,7 @@
 #include "TArray.h"
 
 
-template<class T, class Tree = TRedBlackTree<T, TArray<T>>>
+template<class T, class Tree = TRedBlackTree<T, TArray<T> > >
 class TSet
 {
 private:
