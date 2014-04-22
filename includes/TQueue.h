@@ -22,7 +22,7 @@
 **/
 
 
-template<class T, class Array = TArray<T>>
+template<class T, class Array = TArray<T> >
 class TQueue
 {
 private:
